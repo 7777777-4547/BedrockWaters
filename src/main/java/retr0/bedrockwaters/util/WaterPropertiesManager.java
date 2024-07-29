@@ -23,7 +23,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
-import static net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags.*;
+//import static net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags.*;
+import static net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags.*;
 import static net.minecraft.registry.tag.BiomeTags.IS_HILL;
 import static net.minecraft.registry.tag.BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL;
 import static retr0.bedrockwaters.util.BiomeProperties.VANILLA_BIOME_PROPERTIES;
@@ -51,64 +52,64 @@ public final class WaterPropertiesManager {
      * Handler mappings to generate customized biome properties for unknown biomes.
      */
     private static final HandlerMap<TagKey<Biome>, RegistryEntry<Biome>, BiomeProperties> customizedProperties = new HandlerMap<>(Map.ofEntries(
-        entry(OCEAN, b -> {
-            if (b.isIn(AQUATIC_ICY))
-                return VANILLA_BIOME_PROPERTIES.get(b.isIn(DEEP_OCEAN) ? BiomeKeys.DEEP_FROZEN_OCEAN : BiomeKeys.FROZEN_OCEAN);
+        entry(IS_OCEAN, b -> {
+            if (b.isIn(IS_AQUATIC_ICY))
+                return VANILLA_BIOME_PROPERTIES.get(b.isIn(IS_DEEP_OCEAN) ? BiomeKeys.DEEP_FROZEN_OCEAN : BiomeKeys.FROZEN_OCEAN);
             else if (b.isIn(PRODUCES_CORALS_FROM_BONEMEAL))
-                return VANILLA_BIOME_PROPERTIES.get(b.isIn(DEEP_OCEAN) ? BiomeKeys.DEEP_LUKEWARM_OCEAN : BiomeKeys.WARM_OCEAN);
+                return VANILLA_BIOME_PROPERTIES.get(b.isIn(IS_DEEP_OCEAN) ? BiomeKeys.DEEP_LUKEWARM_OCEAN : BiomeKeys.WARM_OCEAN);
             else
-                return VANILLA_BIOME_PROPERTIES.get(b.isIn(DEEP_OCEAN) ? BiomeKeys.DEEP_OCEAN : BiomeKeys.OCEAN);
+                return VANILLA_BIOME_PROPERTIES.get(b.isIn(IS_DEEP_OCEAN) ? BiomeKeys.DEEP_OCEAN : BiomeKeys.OCEAN);
         }),
-        entry(FOREST, b -> {
+        entry(IS_FOREST, b -> {
             if (b.isIn(IS_HILL))
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.WINDSWEPT_FOREST);
-            else if (b.isIn(CLIMATE_COLD))
+            else if (b.isIn(IS_COLD))
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.OLD_GROWTH_SPRUCE_TAIGA);
             else
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
         }),
-        entry(MOUNTAIN, b -> {
-            if (b.isIn(ICY))
+        entry(IS_MOUNTAIN, b -> {
+            if (b.isIn(IS_ICY))
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.FROZEN_PEAKS);
-            if (b.isIn(MOUNTAIN_SLOPE))
+            if (b.isIn(IS_MOUNTAIN_SLOPE))
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.SNOWY_SLOPES);
-            else if (b.isIn(MOUNTAIN_PEAK))
+            else if (b.isIn(IS_MOUNTAIN_PEAK))
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.JAGGED_PEAKS);
             else
                 return VANILLA_BIOME_PROPERTIES.get(BiomeKeys.MEADOW);
         }),
-        entry(RIVER,             b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(AQUATIC_ICY) ? BiomeKeys.FROZEN_RIVER : BiomeKeys.RIVER)),
-        entry(BEACH,             b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(SNOWY) ? BiomeKeys.SNOWY_BEACH : BiomeKeys.BEACH)),
-        entry(TAIGA,             b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(SNOWY) ? BiomeKeys.SNOWY_TAIGA : BiomeKeys.TAIGA)),
-        entry(PLAINS,            b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(VEGETATION_DENSE) ? BiomeKeys.SUNFLOWER_PLAINS : BiomeKeys.PLAINS)),
-        entry(EXTREME_HILLS,     b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.WINDSWEPT_HILLS)),
-        entry(SWAMP,             b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.SWAMP)),
-        entry(JUNGLE,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.JUNGLE)),
-        entry(SAVANNA,           b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(VEGETATION_SPARSE) ? BiomeKeys.SAVANNA_PLATEAU : BiomeKeys.SAVANNA)),
-        entry(BADLANDS,          b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.BADLANDS)),
-        entry(DESERT,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.DESERT)),
-        entry(CAVES,             b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(CLIMATE_WET) ? BiomeKeys.LUSH_CAVES : BiomeKeys.DRIPSTONE_CAVES)),
-        entry(IN_NETHER,         b -> VANILLA_BIOME_PROPERTIES.get(
-            b.isIn(NETHER_FORESTS) ? BiomeKeys.CRIMSON_FOREST : BiomeKeys.BASALT_DELTAS)),
-        entry(IN_THE_END,        b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.THE_END)),
+        entry(IS_RIVER,             b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_AQUATIC_ICY) ? BiomeKeys.FROZEN_RIVER : BiomeKeys.RIVER)),
+        entry(IS_BEACH,             b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_SNOWY) ? BiomeKeys.SNOWY_BEACH : BiomeKeys.BEACH)),
+        entry(IS_TAIGA,             b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_SNOWY) ? BiomeKeys.SNOWY_TAIGA : BiomeKeys.TAIGA)),
+        entry(IS_PLAINS,            b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_VEGETATION_DENSE) ? BiomeKeys.SUNFLOWER_PLAINS : BiomeKeys.PLAINS)),
+        entry(IS_HILL,     b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.WINDSWEPT_HILLS)),
+        entry(IS_SWAMP,             b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.SWAMP)),
+        entry(IS_JUNGLE,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.JUNGLE)),
+        entry(IS_SAVANNA,           b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_VEGETATION_SPARSE) ? BiomeKeys.SAVANNA_PLATEAU : BiomeKeys.SAVANNA)),
+        entry(IS_BADLANDS,          b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.BADLANDS)),
+        entry(IS_DESERT,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.DESERT)),
+        entry(IS_CAVE,             b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_WET) ? BiomeKeys.LUSH_CAVES : BiomeKeys.DRIPSTONE_CAVES)),
+        entry(IS_NETHER,         b -> VANILLA_BIOME_PROPERTIES.get(
+            b.isIn(IS_NETHER_FOREST) ? BiomeKeys.CRIMSON_FOREST : BiomeKeys.BASALT_DELTAS)),
+        entry(IS_END,        b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.THE_END)),
 
         // For "themed biomes" we check for more generic tags.
-        entry(ICY,               b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.ICE_SPIKES)),
-        entry(SNOWY,             b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.SNOWY_PLAINS)),
-        entry(FLORAL,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.FLOWER_FOREST)),
-        entry(MUSHROOM,          b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.MUSHROOM_FIELDS)),
+        entry(IS_ICY,               b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.ICE_SPIKES)),
+        entry(IS_SNOWY,             b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.SNOWY_PLAINS)),
+        entry(IS_FLORAL,            b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.FLOWER_FOREST)),
+        entry(IS_MUSHROOM,          b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.MUSHROOM_FIELDS)),
 
         // For all other cases, we check climate tags.
-        entry(CLIMATE_DRY,       b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.DESERT)),
-        entry(CLIMATE_HOT,       b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.JUNGLE)),
-        entry(CLIMATE_TEMPERATE, b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.BIRCH_FOREST)),
-        entry(CLIMATE_COLD,      b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.TAIGA))
+        entry(IS_DRY,       b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.DESERT)),
+        entry(IS_HOT,       b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.JUNGLE)),
+        entry(IS_TEMPERATE, b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.BIRCH_FOREST)),
+        entry(IS_COLD,      b -> VANILLA_BIOME_PROPERTIES.get(BiomeKeys.TAIGA))
     ), DEFAULT_BEDROCK_PROPERTIES);
 
     public static void init() {
