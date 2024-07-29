@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'fabric-loom' version '1.7-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -18,7 +18,10 @@ repositories {
     maven { url 'https://api.modrinth.com/maven' }
     maven {
         url "https://jitpack.io"
-        content { includeGroup "com.github.2Retr0" }
+        content {
+            includeGroup "com.github.2Retr0"
+            includeGroup "com.github.7777777-4547"
+        }
     }
 }
 
@@ -33,12 +36,17 @@ dependencies {
     modImplementation(fabricApi.module("fabric-networking-api-v1", project.fabric_version))
     modImplementation(fabricApi.module("fabric-entity-events-v1", project.fabric_version))
     modImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_version))
-    modImplementation(fabricApi.module("fabric-convention-tags-v1", project.fabric_version))
+    modImplementation(fabricApi.module("fabric-convention-tags-v2", project.fabric_version))
 
     // --- CarrotConfig ---
+    modCompileOnly "com.github.7777777-4547:carrotconfig:${project.carrotconfig_version}"
+    modImplementation "com.github.7777777-4547:carrotconfig:${project.carrotconfig_version}"
+    include "com.github.7777777-4547:carrotconfig:${project.carrotconfig_version}"
+    /*
     modCompileOnly "com.github.2Retr0:carrotconfig:${project.carrotconfig_version}"
     modImplementation "com.github.2Retr0:carrotconfig:${project.carrotconfig_version}"
     include "com.github.2Retr0:carrotconfig:${project.carrotconfig_version}"
+    */
 
     // --- Dev Environment Dependencies ---
     modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -50,7 +58,7 @@ dependencies {
     modCompileOnly "maven.modrinth:iris:${project.iris_version}"
     modLocalRuntime "maven.modrinth:iris:${project.iris_version}"
     modLocalRuntime "org.anarres:jcpp:1.4.14"
-    modLocalRuntime "io.github.douira:glsl-transformer:2.0.0-pre13"
+    modLocalRuntime "io.github.douira:glsl-transformer:2.0.1"
 }
 
 processResources {
@@ -62,8 +70,8 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
+    // Minecraft 1.21 (24w14a) upwards uses Java 21.
+    it.options.release = 21
 }
 
 java {
@@ -72,13 +80,13 @@ java {
     // If you remove this line, sources will not be generated.
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${archivesBaseName}"}
+        rename { "${it}_${archives_base_name}"}
     }
 }
 
